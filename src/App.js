@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
+import Dashboard from './components/dashboard/dashboard';
+import Login from './components/login/login';
+import Signup from './components/signup/signup';
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const addUser = (user) => {
+    setUsers([...users, user]);
+  }
+  const removeUser = (user) => {
+    const newUsers = users.filter(u => u.name !== user.name);
+    setUsers(newUsers);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+      <div>
+        <Routes>
+          <Route exact path="/" element={<Login users={users} removeUser={removeUser}/> }/>
+          <Route path="/signup" element={<Signup addUser={addUser} />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+    </Router>
+      
     </div>
   );
 }
